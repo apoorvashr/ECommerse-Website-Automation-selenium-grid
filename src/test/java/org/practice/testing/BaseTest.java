@@ -17,11 +17,13 @@ import java.util.Properties;
 
 public class BaseTest {
 
-  private static WebDriver webDriver;
+ // private static WebDriver webDriver;
   private static final Properties props = new Properties();
+  private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-  static {
-      String resourceName = "config.properties";
+
+    static {
+      String resourceName = "application.properties";
       try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName)) {
 
           if (inputStream == null) {
@@ -40,39 +42,47 @@ public class BaseTest {
   }
 
   public WebDriver getDriver(){
-      return webDriver;
+      return driver.get();
   }
 
-    @BeforeClass(alwaysRun = true)
-    @Parameters({"browser", "gridUrl"})
-    public void setUp(String browser, String gridUrl) throws Exception {
-      //WebDriver webDriver;
-      if (browser.equalsIgnoreCase("chrome")) {
-          ChromeOptions options = new ChromeOptions();
-          options.setPlatformName("WINDOWS");
-          webDriver = new RemoteWebDriver(new URL(gridUrl),options);
-      }  else if (browser.equalsIgnoreCase("firefox")) {
-          FirefoxOptions options = new FirefoxOptions();
-          options.setPlatformName("LINUX");
-          webDriver = new RemoteWebDriver(new URL(gridUrl), options);
-      } else if (browser.equalsIgnoreCase("edge")) {
-          EdgeOptions options = new EdgeOptions();
-          options.setPlatformName("WINDOWS");
-          webDriver = new RemoteWebDriver(new URL(gridUrl), options);
-      } else {
-          throw new Exception("unsupported browser--"+browser);
-      }
-     // driver.set(webDriver);
-      getDriver().manage().deleteAllCookies();
-      getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-      webDriver.get(props.getProperty("URL"));
-      getDriver().manage().window().maximize();
-     }
+    @BeforeMethod(alwaysRun = true)
+    @Parameters({"browser", "os"})
+    public void setUp(String browser, String os) throws Exception {
+
+        WebDriver webDriver;
+
+        if (browser.equalsIgnoreCase("chrome")) {
+            ChromeOptions options = new ChromeOptions();
+            options.setPlatformName(os);
+            webDriver = new RemoteWebDriver(new URL(props.getProperty("GRID_URL")), options);
+
+        } else if (browser.equalsIgnoreCase("firefox")) {
+            FirefoxOptions options = new FirefoxOptions();
+            options.setPlatformName(os);
+            webDriver = new RemoteWebDriver(new URL(props.getProperty("GRID_URL")), options);
+
+        } else if (browser.equalsIgnoreCase("edge")) {
+            EdgeOptions options = new EdgeOptions();
+            options.setPlatformName(os);
+            webDriver = new RemoteWebDriver(new URL(props.getProperty("GRID_URL")), options);
+
+        } else {
+            throw new Exception("Unsupported browser: " + browser);
+        }
+
+        driver.set(webDriver);
+
+        getDriver().manage().deleteAllCookies();
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().get(props.getProperty("URL"));
+        getDriver().manage().window().maximize();
+    }
 
      @AfterMethod (alwaysRun = true)
       public void tearDown() {
           if (getDriver()!=null) {
               getDriver().quit();
+              driver.remove();
           }
      }
   }

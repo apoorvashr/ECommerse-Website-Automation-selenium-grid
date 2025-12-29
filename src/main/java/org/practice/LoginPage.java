@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class LoginPage {
+public class LoginPage extends  BasePage {
 
 	/*@FindBy(id = "input-firstname")
     WebElement firstName;
@@ -31,6 +31,17 @@ public class LoginPage {
     WebElement loginBtn;
 
 
+   @FindBy(linkText = "My Account")
+   WebElement textTyper;
+
+
+    public LoginPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public void navigateLogin() {
+        textTyper.click();
+    }
 
 
 }

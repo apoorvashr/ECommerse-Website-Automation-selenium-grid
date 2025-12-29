@@ -1,11 +1,11 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="MasterSuite" parallel="tests" thread-count="2">
 
-<suite name="MasterSuite">
-    <test name="Test" thread-count="1">
-    <parameter name="os" value="windows" />
-    <parameter name="browser" value="chrome"/>
-    <classes>
-        <class name="org.practice.testing.LoginTest"/>
-    </classes>
+    <test name="ChromeTest">
+        <parameter name="browser" value="chrome"/>
+        <parameter name="os" value="Windows 11"/>
+        <classes>
+            <class name="org.practice.testing.LoginTest"/>
+        </classes>
     </test>
+
 </suite>
