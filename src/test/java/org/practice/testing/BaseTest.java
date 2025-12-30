@@ -6,9 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
@@ -16,8 +15,8 @@ import java.util.Properties;
 
 public class BaseTest {
 
-  public static WebDriver driver;
-  public static final Properties prop = new Properties();
+  protected static WebDriver driver;
+  protected static final Properties prop = new Properties();
   protected static final Logger logger = LogManager.getLogger(BaseTest.class);
 
   static {
@@ -41,7 +40,7 @@ public class BaseTest {
       return driver;
   }
 
-  @BeforeClass()
+  @BeforeSuite()
   @Parameters({"browser","os","type"})
   public void setUp(String br, String os, String hosType) throws Exception {
       DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -67,7 +66,7 @@ public class BaseTest {
      }
 
 
-     @AfterClass(alwaysRun = true)
+     @AfterSuite(alwaysRun = true)
      public void tearDown() {
       if (driver!=null) {
           driver.quit();

@@ -4,6 +4,8 @@ package org.practice;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 
 public class LoginPage extends BasePage  {
 
@@ -19,15 +21,20 @@ public class LoginPage extends BasePage  {
      @FindBy (xpath = "//input[@value='Login']")
      WebElement submitBtn;
 
+     MyAccountPage myAccountPage;
+
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
     public void loginUser(){
-        waitforVisibility(title);
+        waitforVisibility(inputEmail);
         addTextInTextfield(inputEmail,"tt@test.com");
         addTextInTextfield(inputPassword,"12345");
         clickElement(submitBtn);
+       // myAccountPage = new MyAccountPage(driver);
+       // myAccountPage.verifyLoggedin();
     }
+
 
 }
