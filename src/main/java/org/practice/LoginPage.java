@@ -1,47 +1,33 @@
 package org.practice;
 
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class LoginPage extends  BasePage {
+public class LoginPage extends BasePage  {
 
-	/*@FindBy(id = "input-firstname")
-    WebElement firstName;
+     @FindBy(linkText = "Qafox.com")
+     WebElement title;
 
-    @FindBy(id = "input-lastname")
-    WebElement lastName;
+     @FindBy(id = "input-email")
+     WebElement inputEmail;
 
-    @FindBy(id = "input-email")
-    WebElement emailID;
+     @FindBy(id = "input-password")
+     WebElement inputPassword;
 
-    @FindBy(tagName = "telephone")
-    WebElement telePhone;
-
-    @FindBy(xpath = "//*[@type='submit']")
-    WebElement submitBtn;*/
-
-    @FindBy(id = "input-email")
-    WebElement emailEt;
-
-    @FindBy( xpath = "//*[@type='password']")
-    WebElement password;
-
-     @FindBy(className = "btn btn-primary")
-    WebElement loginBtn;
-
-
-   @FindBy(linkText = "My Account")
-   WebElement textTyper;
-
+     @FindBy (xpath = "//input[@value='Login']")
+     WebElement submitBtn;
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    public void navigateLogin() {
-        textTyper.click();
+    public void loginUser(){
+        waitforVisibility(title);
+        addTextInTextfield(inputEmail,"tt@test.com");
+        addTextInTextfield(inputPassword,"12345");
+        clickElement(submitBtn);
     }
-
 
 }
