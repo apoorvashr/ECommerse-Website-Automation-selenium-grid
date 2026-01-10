@@ -4,13 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.*;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Properties;
 
 public class BaseTest {
@@ -36,7 +37,8 @@ public class BaseTest {
           logger.error(e.getMessage());
       }
   }
-  public WebDriver getDriver(){
+
+  public WebDriver getDriver() {
       return driver;
   }
 
@@ -55,21 +57,26 @@ public class BaseTest {
               break;
             }
       driver = new RemoteWebDriver(gridURL,capabilities);
-     }  else if (hosType.equals("local")){
+     }  else if (hosType.equals("local")) {
           driver = new ChromeDriver();
       }
 
+      ChromeOptions options = new ChromeOptions();
       driver.manage().deleteAllCookies();
       driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
       driver.get(prop.getProperty("URL"));
       driver.manage().window().maximize();
-     }
-
+        options.setExperimentalOption("prefs", Map.of(
+              "credentials_enable_service", false,
+              "profile.password_manager_enabled", false
+      ));
+       driver = new ChromeDriver(options);
+  }
 
      @AfterSuite(alwaysRun = true)
      public void tearDown() {
       if (driver!=null) {
           driver.quit();
-       }
+         }
      }
  }

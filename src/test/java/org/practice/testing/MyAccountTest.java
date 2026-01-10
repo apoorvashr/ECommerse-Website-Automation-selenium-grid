@@ -10,9 +10,15 @@ public class MyAccountTest extends BaseTest {
     private static final Logger logger = LogManager.getLogger(MyAccountTest.class);
     MyAccountPage myAccountPage;
 
-    @Test(/*dependsOnMethods = "verifyLogin"*/)
+    @Test()
     public void verifyAccountLoggedIn(){
         myAccountPage = new MyAccountPage(this.getDriver());
-        myAccountPage.verifyLoggedin();
+        myAccountPage.verifyAccount();
     }
+
+    @Test(dependsOnMethods ="verifyAccountLoggedIn")
+    public void editAccount(){
+        myAccountPage.EditAccountDetails();
+    }
+
 }
